@@ -1,3 +1,3 @@
 #pragma once
-#include <iostream>
-#define XTLOGE(message) std::cout<<__FILE__<<","<<__FUNCTION__<<","<<__LINE__<<":"<<message<<std::endl;
+#include "xt_asyc_cout.h"
+#define XTLOGE(message) ACOUT<<__FILE__<<","<<__FUNCTION__<<","<<__LINE__<<":"<<message<<std::endl;
