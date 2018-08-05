@@ -1,5 +1,6 @@
 #pragma once
 #include "xt_std_head.h"
+#include "xt_class_helper.h"
 /*
 if U&& can be convertible to T:
 result is created by the convertible way.
@@ -15,19 +16,7 @@ because:
 "" can be convertible to 'std::string'
 
 */
-template<class T, class U>
-T QCast(U&& u)
-{
-	return QCastInner<T>(std::is_convertible<U&&, T>::type(), std::forward<U>(u));
-}
 
-template<class T, class U>
-bool QCastRes(U&& u)
-{
-	bool bres = false;
-	QCast<T>(std::forward<U>(u), bres);
-	return bres;
-}
 template<class T, class U>
 T QCastInner(std::true_type, U&& u)
 {
@@ -43,11 +32,7 @@ T QCastInner(std::false_type, const U& u)
 	}
 	return Result;
 }
-template<class T, class U>
-T QCast(const U& u, bool& bres)
-{
-	return QCastInner<T>(std::is_convertible<const U&, T>::type(), u, bres);
-}
+
 template<class T, class U>
 T QCastInner(std::true_type, const U& u, bool& bres)
 {
@@ -68,6 +53,29 @@ T QCastInner(std::false_type, const U& u, bool& bres)
 		bres = true;
 	}
 	return Result;
+}
+
+
+template<class T, class U>
+T QCast(U&& u)
+{
+	using TmpType =typename  std::is_convertible<const U&, T>::type;
+	return QCastInner<T>(TmpType{}, std::forward<U>(u));
+}
+
+template<class T, class U>
+bool QCastRes(U&& u)
+{
+	bool bres = false;
+	QCast<T>(std::forward<U>(u), bres);
+	return bres;
+}
+
+template<class T, class U>
+T QCast(const U& u, bool& bres)
+{
+	using TmpType = typename std::is_convertible<const U&, T>::type;
+	return QCastInner<T>(TmpType{}, u, bres);
 }
 
 static void QCast(std::vector<std::string>& con_str, const std::string& str, const std::string& spliter = "")
@@ -106,7 +114,7 @@ static void QCast(std::string& str, const std::vector<std::string>& con_str, con
 template<class T1, class T2, class T3>
 void QCast(std::vector<T1>& vec_t1, const T2& t2, const T3& t3)
 {
-	vec_t1.swap(std::vector<T1>());
+	std::vector<T1>().swap(vec_t1);
 	std::string t2_str;
 	std::string t3_str;
 	{
@@ -129,10 +137,10 @@ void QCast(std::vector<T1>& vec_t1, const T2& t2, const T3& t3)
 	}
 }
 template<class T1, class T2, class T3>
-std::vector<T1> QCastToVec(const T2& t2, const T3& t3)
+std::vector<T1> QCastToVec(T2&& t2, T3&& t3)
 {
 	std::vector<T1> vec_t1;
-	QCast(vec_t1, t2, t3);
+	QCast(vec_t1, std::forward<T2>(t2), std::forward<T3>(t3));
 	return vec_t1;
 }
 template<class T1, class T2, class T3>

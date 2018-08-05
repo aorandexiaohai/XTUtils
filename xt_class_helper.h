@@ -237,14 +237,10 @@ struct xt_function_traits_helper<R(T1)>
 
 
 
-//reference and const only
-#if _MSC_VER == 1900
 template<class T>
 using remove_qualifers_t = std::remove_const_t<std::remove_reference_t<T>>;
 #define REMOVE_QUALIFERS_T(Type) remove_qualifers_t<Type>
-#else if _MSC_VER == 1700
-#define REMOVE_QUALIFERS_T(Type) std::remove_const<typename std::remove_reference<Type>::type>::type
-#endif
+
 #define REMOVE_QUALIFIERS(exp) REMOVE_QUALIFERS_T(decltype(exp))
 
 

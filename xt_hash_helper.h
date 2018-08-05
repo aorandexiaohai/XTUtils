@@ -1,6 +1,6 @@
 #pragma once
 
-#if _MSC_VER == 1900
+// #if _MSC_VER == 1900
 
 #include "xt_class_helper.h"
 
@@ -73,4 +73,4 @@ struct XTHashCalculator<size, size, dummy> {
 
 #define XTSTATIC_HASH(type_name) ConstValueOfClass<type_name, XTSTATIC_HASH_STR(#type_name)>::value
 
-#endif
+// #endif
