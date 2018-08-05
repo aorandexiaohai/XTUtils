@@ -1,7 +1,7 @@
 #pragma once
 #include "xt_std_head.h"
 
-#if _MSC_VER == 1900
+
 template<typename Type>
 using PTR = std::shared_ptr<Type>;
 template<typename Type>
@@ -10,12 +10,7 @@ using WPTR = std::weak_ptr<Type>;
 #define PTRMacro(Type) PTR<Type>
 #define WPTRMacro(Type) WPTR<Type>
 
-#else if _MSC_VER == 1700
-#define PTR(Type) std::shared_ptr<Type>
-#define WPTR(Type) std::weak_ptr<Type>
-#define PTRMacro(Type)  PTR(Type)
-#define WPTRMacro(Type) WPTR(Type)
-#endif//_MSC_VER
+
 
 //as we all know, there is a 'nullptr' in c++11
 //but we can not assign it to a weak_ptr

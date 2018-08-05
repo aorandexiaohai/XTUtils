@@ -1,6 +1,6 @@
 #pragma once
 #include "xt_pointer.h"
-#if _MSC_VER == 1900
+
 
 template<class Type, bool>
 struct MakeDefaultObjInner;
@@ -43,15 +43,7 @@ type var_name##_ = MakeDefaultObj<type>();
 protected:\
 type var_name##_;
 
-#else if _MSC_VER == 1700
 
-#define VarMacro(type, var_name)\
-protected:\
-type var_name##_;
-
-#define VarMacroPure(type, var_name) VarMacro(type, var_name)
-
-#endif //_MSC_VER
 
 //ensure zero initialize manually.
 #define VarMacroArr(type, var_name, size)\
