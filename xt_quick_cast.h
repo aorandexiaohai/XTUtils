@@ -253,10 +253,9 @@ template<class Type>
 std::string FixedWidth(Type&& value, int width, char placeholder = ' ')
 {
 	std::stringstream ss;
+	ss.setf(std::ios::left);
 	ss << std::setw(width) << std::setfill(placeholder) << value;
-	std::string result;
-	ss >> result;
-	return result;
+	return ss.str();
 }
 
 
