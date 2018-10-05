@@ -1,6 +1,7 @@
 #pragma once
 #include "xt_std_head.h"
 #include "xt_class_helper.h"
+#include "xt_string.h"
 /*
 if U&& can be convertible to T:
 result is created by the convertible way.
@@ -59,8 +60,26 @@ T QCastInner(std::false_type, const U& u, bool& bres)
 template<class T, class U>
 T QCast(U&& u)
 {
-	using TmpType =typename  std::is_convertible<const U&, T>::type;
-	return QCastInner<T>(TmpType{}, std::forward<U>(u));
+	using BaseU = std::remove_cv_t<U>;
+	using BaseT = std::remove_cv_t<T>;
+	if constexpr (std::is_same_v<BaseT, bool> && std::is_convertible_v<const BaseU&, std::string>)
+	{
+		auto value = XT::String::ToUpper(u);
+		if(value == "0" || value == "" || value =="FALSE")
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+
+	}
+	else
+	{
+		using TmpType =typename  std::is_convertible<const U&, T>::type;
+		return QCastInner<T>(TmpType{}, std::forward<U>(u));
+	}
 }
 
 template<class T, class U>
